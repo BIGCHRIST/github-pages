@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu - Pourras-tu battre le record de BIGCHRIST ?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('Ronaldo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: fadeIn 2s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .question {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            animation: bounceIn 1s;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .options button {
+            display: block;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: gold;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            width: 300px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .options button:hover {
+            background-color: darkgoldenrod;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px gold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pourras-tu battre le record de BIGCHRIST ?</h1>
+        <div class="question" id="question">Chargement…</div>
+        <div class="options" id="options"></div>
+    </div>
+
+    <audio id="correctSound" src="correct.mp3"></audio>
+    <audio id="wrongSound" src="wrong.mp3"></audio>
+
+    <script>
+        const questions = [
+            {
+                question: "Quel est le surnom de Cristiano Ronaldo ?",
+                options: ["CR7", "CR9", "CR11", "CR15"],
+                answer: "CR7"
+            },
+            {
+                question: "Combien de Ballons d'Or a remporté Ronaldo ?",
+                options: ["3", "5", "7", "9"],
+                answer: "5"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        
+        function loadQuestion() {
+            const questionElement = document.getElementById("question");
+            const optionsElement = document.getElementById("options");
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = "";
+            
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const correctAnswer = questions[currentQuestionIndex].answer;
+            const correctSound = document.getElementById("correctSound");
+            const wrongSound = document.getElementById("wrongSound");
+            
+            if (selectedOption === correctAnswer) {
+                correctSound.play();
+                alert("Bonne réponse !");
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    setTimeout(loadQuestion, 1000);
+                } else {
+                    alert("Félicitations ! Tu as terminé le jeu.");
+                }
+            } else {
+                wrongSound.play();
+                alert("Mauvaise réponse. Réessaie !");
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
